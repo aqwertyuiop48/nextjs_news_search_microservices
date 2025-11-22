@@ -8,6 +8,7 @@
 | **Tailwind CSS**        | Throughout components & pages                | Utility-first CSS for fast, responsive styling                          |
 
 
+
 ### Backend
 | What                                | Where                                     | Purpose                                                          |
 | ----------------------------------- | ----------------------------------------- | ---------------------------------------------------------------- |
