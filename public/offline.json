@@ -1,0 +1,18 @@
+{
+  "guardian": [
+    {
+      "source": "Guardian",
+      "title": "Offline Guardian News",
+      "url": "https://example.com/guardian-offline",
+      "description": "Offline description"
+    }
+  ],
+  "nyt": [
+    {
+      "source": "NYT",
+      "title": "Offline NYT News",
+      "url": "https://example.com/nyt-offline",
+      "description": "Offline snippet"
+    }
+  ]
+}

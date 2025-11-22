@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  title: News Search Microservice API
+  description: Aggregates articles from NYT and The Guardian based on a keyword.
+  version: 1.0.0
+servers:
+  - url: https://nextjsnewssearchmicroservices.vercel.app
+    description: Production server
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /api/search:
+    get:
+      summary: Search news articles
+      description: |
+        Searches articles from The Guardian and NYT by keyword.  
+        Supports pagination and returns deduplicated, paginated results.
+      parameters:
+        - in: query
+          name: keyword
+          schema:
+            type: string
+            maxLength: 50
+          required: true
+          description: The search keyword.
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          required: false
+          description: Page number for pagination.
+        - in: query
+          name: city
+          schema:
+            type: string
+            maxLength: 50
+          required: false
+          description: Optional city filter (not used in query, returned in response).
+      responses:
+        '200':
+          description: Successful search
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  newsWebsite:
+                    type: string
+                    example: My News Aggregator
+                  articles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                          example: NYT
+                        title:
+                          type: string
+                          example: "Apple releases new iPhone"
+                        url:
+                          type: string
+                          format: uri
+                          example: "https://nytimes.com/article"
+                        description:
+                          type: string
+                          example: "The latest model features..."
+                  totalPages:
+                    type: integer
+                    example: 3
+                  currentPage:
+                    type: integer
+                    example: 1
+                  searchKeyword:
+                    type: string
+                    example: apple
+                  city:
+                    type: string
+                    example: New York
+                  pageNo:
+                    type: integer
+                    example: 1
+                  prevPage:
+                    type: integer
+                    nullable: true
+                    example: null
+                  nextPage:
+                    type: integer
+                    nullable: true
+                    example: 2
+                  totalResults:
+                    type: integer
+                    example: 25
+                  timeTakenMs:
+                    type: integer
+                    example: 150
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/api/search?keyword=apple&city=New%20York&page=1"
+                      prev:
+                        type: string
+                        nullable: true
+                        example: null
+                      next:
+                        type: string
+                        nullable: true
+                        example: "/api/search?keyword=apple&city=New%20York&page=2"
+        '400':
+          description: Invalid input (e.g., keyword sanitized to empty)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid keyword after sanitization.
+
+components:
+  schemas: {}

@@ -1,0 +1,19 @@
+<!-- 
+  ✅ This HTML file serves as a simple standalone page 
+  to display interactive API documentation using Redoc.
+  It fetches the OpenAPI spec from /openapi.yaml and renders it.
+-->
+  
+<!DOCTYPE html> <!-- ✅ Declares the document as HTML5 -->
+<html>
+  <head>
+    <title>API Docs</title> <!-- ✅ Sets the page title shown in browser tab -->
+  </head>
+  <body>
+    <!-- ✅ Redoc element to render OpenAPI docs; loads spec from /openapi.yaml -->
+    <redoc spec-url="/openapi.yaml"></redoc>
+
+    <!-- ✅ Load Redoc standalone script from CDN to render the docs -->
+    <script src="https://cdn.jsdelivr.net/npm/redoc@latest/bundles/redoc.standalone.js"></script>
+  </body>
+</html>
