@@ -1,5 +1,5 @@
-# ------------ Build stage ------------
-FROM node:18-alpine AS builder
+# ------------ Build Stage ------------
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -9,24 +9,22 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-
-# ------------ Production stage ------------
-FROM node:18-alpine AS runner
+# ------------ Production Stage ------------
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
-# Only copy package.json & package-lock.json for prod install
-COPY package*.json ./
-RUN npm ci --only=production
+ENV NODE_ENV=production
+ENV PORT=8080
 
-# Copy built output and necessary files
-COPY --from=builder /app/.next .next
-COPY --from=builder /app/public public
-COPY --from=builder /app/next.config.js ./
+# Copy node_modules and built assets directly from builder (prevents double npm ci)
+COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.* ./
 
-# Expose port 8080 instead of default 3000
 EXPOSE 8080
 
-# Start Next.js app with port 8080
-CMD ["npm", "start", "--", "-p", "8080"]
+# Bind to 0.0.0.0 and listen on dynamic $PORT (or fallback to 8080)
+CMD ["sh", "-c", "npx next start -H 0.0.0.0 -p ${PORT:-8080}"]
